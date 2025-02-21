@@ -1,0 +1,7 @@
+lets create a folder: mkdir sairam-user && cd sairam-user
+ Generate a key using openssl : openssl genrsa -out sairam.key 2048
+ Generate a Client Sign Request (CSR) : openssl req -new -key sairam.key -out sairam.csr -subj "/CN=sairam/O=group1"
+ Generate the certificate (CRT):  openssl x509 -req -in sairam.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -out sairam.crt -days 500
+
+ Steps to create user. 
+lets create a user: kubectl config set-credentials sairam --client-certificate=sairam.crt--client-key=sairam.key
