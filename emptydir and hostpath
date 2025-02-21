@@ -1,0 +1,74 @@
+HOSTPATH Manifest file:
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: uber
+  template:
+    metadata:
+      labels:
+        app: uber
+    spec:
+      containers:
+        - name: cont-1
+          image: centos
+          command: ["/bin/bash", "-c", "while true; do echo welcome to devops; sleep 5; done"]
+          volumeMounts:
+            - name: volume
+              mountPath: "/tmp/jenkins"
+
+
+        - name: cont-2
+          image: ubuntu
+          command: ["/bin/bash", "-c", "while true; do echo welcome to devops; sleep 5; done"]
+          volumeMounts:
+            - name: volume
+              mountPath: "/opt/docker"
+
+      volumes:
+        - name: volume
+          hostPath:
+            path: "/tmp/mydata"
+
+
+EMPTYDIR Manifest file:
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploy-1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: uber
+  template:
+    metadata:
+      labels:
+        app: uber
+    spec:
+      containers:
+        - name: cont-1
+          image: centos
+          command: ["/bin/bash", "-c", "while true; do echo welcome to devops; sleep 5; done"]
+          volumeMounts:
+            - name: volume
+              mountPath: "/tmp/jenkins"
+
+
+        - name: cont-2
+          image: ubuntu
+          command: ["/bin/bash", "-c", "while true; do echo welcome to devops; sleep 5; done"]
+          volumeMounts:
+            - name: volume
+              mountPath: "/opt/docker"
+
+      volumes:
+        - name: volume
+          emptyDir: {}
