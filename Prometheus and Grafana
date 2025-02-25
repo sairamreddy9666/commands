@@ -22,8 +22,7 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
  kubectl get ns
 
  INSTALL PROMETHEUS:
- helm install prometheus prometheus-community/prometheus --namespace prometheus --set 
-alertmanager.persistentVolume.storageClass="gp2" --set server.persistentVolume.storageClass="gp2"
+ helm install prometheus prometheus-community/prometheus --namespace prometheus --set alertmanager.persistentVolume.storageClass="gp2" --set server.persistentVolume.storageClass="gp2"
  kubectl get pods -n prometheus
  kubectl get all -n prometheus
 
@@ -32,8 +31,7 @@ alertmanager.persistentVolume.storageClass="gp2" --set server.persistentVolume.s
 
  INSTALL GRAFANA:
  helm repo add grafana https://grafana.github.io/helm-charts
- helm install grafana grafana/grafana --namespace grafana --set persistence.storageClassName="gp2" --set 
-persistence.enabled=true --set adminPassword='EKS!sAWSome' --set  service.type=LoadBalancer
+ helm install grafana grafana/grafana --namespace grafana --set persistence.storageClassName="gp2" --set persistence.enabled=true --set adminPassword='EKS!sAWSome' --set  service.type=LoadBalancer
  kubectl get pods -n grafana
  kubectl get service -n grafana
 
