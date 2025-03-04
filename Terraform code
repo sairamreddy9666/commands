@@ -1,0 +1,19 @@
+provider "aws" {
+region = "ap-south-1"
+}
+
+resource "aws_instance" "label" {
+tags = {
+Name = "Terraform-server"
+Environment = "test"
+Project = "zomato"
+}
+ami = "ami-0f2ce9ce760bd7133"
+instance_type = "t2.micro"
+key_name = "mumbai-kp"
+availability_zone = "ap-south-1a"
+root_block_device {
+volume_size = 10
+}
+count = 1
+}
