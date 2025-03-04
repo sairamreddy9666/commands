@@ -1,0 +1,12 @@
+AMAZON LINUX
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+sudo yum -y install terraform
+terraform version
+
+UBUNTU
+wget https://releases.hashicorp.com/terraform/1.1.3/terraform_1.1.3_linux_amd64.zip
+sudo apt-get install zip -y
+Unzip terraform 
+mv terraform /usr/local/bin/
+terraform version
