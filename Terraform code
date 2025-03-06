@@ -74,7 +74,7 @@ resource "aws_instance" "label" {
     Environment = var.i-env
   }
   ami           = var.i-ami
-  instance_type = var.i-type
+  instance_type = var.i-type ? "t2.micro" : "t2.medium"
   count         = var.i-count
 }
 cat variable.tf
@@ -98,8 +98,8 @@ variable "i-ami" {
 
 variable "i-type" {
   description = "this represents instance type"
-  type        = string
-  default     = "t2.micro"
+  type        = bool
+  default     = true
 }
 
 variable "i-count" {
