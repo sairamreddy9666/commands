@@ -57,3 +57,53 @@ from_port = 0
 to_port = 0
 protocol = "-1"
 cidr_blocks = ["0.0.0.0/0"]
+
+
+
+
+SEPERATE FILES:
+
+cat provider.tf
+provider "aws" {
+  region = "ap-south-1"
+}
+cat resource.tf
+resource "aws_instance" "label" {
+  tags = {
+    Name        = var.i-name
+    Environment = var.i-env
+  }
+  ami           = var.i-ami
+  instance_type = var.i-type
+  count         = var.i-count
+}
+cat variable.tf
+variable "i-name" {
+  description = "this represents instance name"
+  type        = string
+  default     = "Dev-Server"
+}
+
+variable "i-env" {
+  description = "this represents instance environment"
+  type        = string
+  default     = "Development"
+}
+
+variable "i-ami" {
+  description = "this represents instance ami"
+  type        = string
+  default     = "ami-0f2ce9ce760bd7133"
+}
+
+variable "i-type" {
+  description = "this represents instance type"
+  type        = string
+  default     = "t2.micro"
+}
+
+variable "i-count" {
+  description = "this represents instance count"
+  type        = number
+  default     = 1
+}
