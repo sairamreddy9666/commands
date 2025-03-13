@@ -1,0 +1,72 @@
+resource "aws_vpc" "myvpc" {
+tags = {
+Name = "Terraform-VPC"
+}
+cidr_block = "10.0.0.0/16"
+instance_tenancy = "default"
+}
+
+resource "aws_subnet" "mysub" {
+vpc_id = aws_vpc.myvpc.id
+tags = {
+Name = "Public-Subnet"
+}
+availability_zone = "ap-south-1a"
+cidr_block = "10.0.1.0/24"
+map_public_ip_on_launch = "true"
+}
+
+resource "aws_subnet" "pvtsub" {
+vpc_id = aws_vpc.myvpc.id
+tags = {
+Name = "Private-Subnet"
+}
+availability_zone = "ap-south-1a"
+cidr_block = "10.0.2.0/24"
+}
+
+resource "aws_internet_gateway" "myigw" {
+tags = {
+Name = "Internet-Gateway"
+}
+vpc_id = aws_vpc.myvpc.id
+}
+
+resource "aws_route_table" "myrt" {
+tags = {
+Name = "Public-RouteTable"
+}
+vpc_id = aws_vpc.myvpc.id
+route {
+cidr_block = "0.0.0.0/0"
+gateway_id = aws_internet_gateway.myigw.id
+}
+}
+
+resource "aws_route_table_association" "myass" {
+subnet_id = aws_subnet.mysub.id
+route_table_id = aws_route_table.myrt.id
+}
+
+resource "aws_nat_gateway" "myngw" {
+tags = {
+Name = "Nat-Gateway"
+}
+subnet_id = aws_subnet.pvtsub.id
+}
+
+resource "aws_route_table" "pvtrt" {
+tags = {
+Name = "Private-RouteTable"
+}
+vpc_id = aws_vpc.myvpc.id
+route {
+cidr_block = "0.0.0.0/0"
+gateway_id = aws_nat_gateway.myngw.id
+}
+}
+
+resource "aws_route_table_association" "pvtass" {
+subnet_id = aws_subnet.pvtsub.id
+route_table_id = aws_route_table.pvtrt.id
+}
