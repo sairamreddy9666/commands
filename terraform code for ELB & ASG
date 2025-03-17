@@ -1,0 +1,126 @@
+resource "aws_launch_template" "mylt" {
+name = "TERRAFORM-LT"
+description = "my terraform launch template"
+image_id = "ami-04aa00acb1165b32a"
+instance_type = "t2.micro"
+key_name = "sairamkey-pair"
+vpc_security_group_ids = [aws_security_group.mysg.id]
+placement {
+availability_zone = "us-east-1a"
+}
+user_data = base64encode(<<-EOF
+#!/bin/bash
+sudo yum update -y
+sudo yum install git -y
+sudo yum install httpd
+systemctl start httpd
+systemctl enable httpd
+git clone https://github.com/CleverProgrammers/pwj-netflix-clone.git
+EOF
+)
+}
+
+resource "aws_elb" "myelb" {
+name = "TERRAFORM-ELB"
+subnets = [aws_subnet.mysubnet1.id,aws_subnet.mysubnet2.id]
+security_groups = [aws_security_group.mysg.id]
+listener {
+instance_port = 80
+instance_protocol = "http"
+lb_port = 80
+lb_protocol = "http"
+}
+}
+
+resource "aws_autoscaling_group" "myasg" {
+name = "TERRAFORM-ASG"
+launch_template {
+id = aws_launch_template.mylt.id
+}
+desired_capacity = 2
+min_size = 2
+max_size = 4
+health_check_type = "EC2"
+load_balancers = [aws_elb.myelb.name]
+vpc_zone_identifier = [aws_subnet.mysubnet1.id,aws_subnet.mysubnet2.id]
+}
+
+
+vim vpc.tf
+resource "aws_vpc" "myvpc" {
+tags = {
+Name = "TERRAFORM-VPC"
+}
+cidr_block = "10.0.0.0/16"
+instance_tenancy = "default"
+enable_dns_hostnames = "true"
+}
+
+resource "aws_subnet" "mysubnet1" {
+vpc_id = aws_vpc.myvpc.id
+tags = {
+Name = "TERRAFORM-SUBNET-1"
+}
+availability_zone = "us-east-1a"
+cidr_block = "10.0.1.0/24"
+map_public_ip_on_launch = "true"
+}
+
+resource "aws_subnet" "mysubnet2" {
+vpc_id = aws_vpc.myvpc.id
+tags = {
+Name = "TERRAFORM-SUBNET-2"
+}
+availability_zone = "us-east-1b"
+cidr_block = "10.0.2.0/24"
+map_public_ip_on_launch = "true"
+}
+
+resource "aws_internet_gateway" "myigw" {
+tags = {
+Name = "TERRAFORM-IGW"
+}
+vpc_id = aws_vpc.myvpc.id
+}
+
+resource "aws_route_table" "myrt" {
+tags = {
+Name = "TERRAFORM-RT"
+}
+vpc_id = aws_vpc.myvpc.id
+route {
+cidr_block = "0.0.0.0/0"
+gateway_id = aws_internet_gateway.myigw.id
+}
+}
+
+resource "aws_route_table_association" "rt-ass1" {
+subnet_id = aws_subnet.mysubnet1.id
+route_table_id = aws_route_table.myrt.id
+}
+
+resource "aws_route_table_association" "rt-ass2" {
+subnet_id = aws_subnet.mysubnet2.id
+route_table_id = aws_route_table.myrt.id
+}
+
+vim securitygroup.tf
+resource "aws_security_group" "mysg" {
+name = "TERRAFORM-SG"
+description = "this is a security group"
+vpc_id = aws_vpc.myvpc.id
+
+ingress {
+from_port = 0
+to_port = 0
+protocol = "-1"
+cidr_blocks = ["0.0.0.0/0"]
+}
+
+egress {
+from_port = 0
+to_port = 0
+protocol = "-1"
+cidr_blocks = ["0.0.0.0/0"]
+}
+}
