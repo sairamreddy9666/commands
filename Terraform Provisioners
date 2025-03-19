@@ -41,3 +41,42 @@ inline = [
 ]
 }
 }
+TERRAFORM LIFECYCLE:
+CREATE-BEFORE-DESTROY:
+resource "aws_instance" "one" {
+ami = "ami-08fe5144e4659a3b3"
+tags = {
+Name = "Myserver"
+}
+instance_type = "t2.micro"
+count = 1
+lifecycle {
+create_before_destroy = true
+}
+}
+
+PREVENT-DESTROY:
+resource "aws_instance" "one" {
+ami = "ami-08fe5144e4659a3b3"
+tags = {
+Name = "Myserver"
+}
+instance_type = "t2.micro"
+count = 1
+lifecycle {
+prevent_destroy = true
+}
+}
+
+IGNORE-CHANGES:
+resource "aws_instance" "one" {
+ami = "ami-08fe5144e4659a3b3"
+tags = {
+Name = "Myserver"
+}
+instance_type = "t2.micro"
+count = 1
+lifecycle {
+ignore_changes = [instance_type, ami]
+}
+}
