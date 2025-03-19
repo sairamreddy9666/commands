@@ -1,0 +1,13 @@
+TERRAFORM PROVISIONERS:
+LOCAL-EXEC:
+resource "aws_instance" "one" {
+ami = "ami-08fe5144e4659a3b3"
+tags = {
+Name = "Myserver"
+}
+instance_type = "t2.micro"
+count = 1
+provisioner "local-exec" {
+command = "echo 'This is Instance ID ${aws_instance.one[0].id}' >> myinstance.txt"
+}
+}
