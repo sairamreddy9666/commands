@@ -1,0 +1,5 @@
+1. Security: Sonarqube, Checkmark, Black duck, Fortify.--->It Scans the code vulnerabilities, code smells, code bugs & code issues.
+2. Build: Maven--Java, Gradle--Androidcode, Nodejs/npm--react/nodejscode, Python--pythoncode, Shell--shellscript.---> It Compression/builds 10GB file into 10MB File.
+3. Containerization: Docker, Containered.crio, Podman.--->It creates a Package in container(secured, Reliable, Isolated etc).
+4. Repository/Artifactory: Nexus, Jfrog.--->
+5. 
