@@ -1,0 +1,27 @@
+| **Object**                      | **Description**                                                                | **Use Case**                                               |
+| ------------------------------- | ------------------------------------------------------------------------------ | ---------------------------------------------------------- |
+| **Pod**                         | Smallest deployable unit in Kubernetes. A Pod contains one or more containers. | Run application containers (e.g., a web server + sidecar). |
+| **ReplicaSet**                  | Ensures a specified number of Pod replicas are running.                        | High availability and scaling of Pods.                     |
+| **Deployment**                  | Manages ReplicaSets and Pods, supports rolling updates & rollbacks.            | Deploy stateless apps like web servers.                    |
+| **StatefulSet**                 | Like Deployment but for stateful apps. Provides stable identity & storage.     | Databases, Kafka, or apps needing persistent storage.      |
+| **DaemonSet**                   | Ensures a Pod runs on all (or selected) nodes.                                 | Node monitoring, logging agents, or networking services.   |
+| **Job**                         | Runs Pods until a task is completed.                                           | Batch jobs like data processing.                           |
+| **CronJob**                     | Runs Jobs on a schedule.                                                       | Scheduled tasks like backups or periodic reports.          |
+| **Service**                     | Provides stable networking to Pods (ClusterIP, NodePort, LoadBalancer).        | Expose applications to internal/external traffic.          |
+| **Ingress**                     | Manages external HTTP/HTTPS access to services, with routing rules.            | Host/path-based routing for multiple apps.                 |
+| **ConfigMap**                   | Stores configuration data as key-value pairs.                                  | Pass environment variables/config files to Pods.           |
+| **Secret**                      | Stores sensitive data (passwords, tokens, keys).                               | Provide credentials securely to Pods.                      |
+| **PersistentVolume (PV)**       | A piece of storage provisioned in the cluster.                                 | Storage abstraction.                                       |
+| **PersistentVolumeClaim (PVC)** | Request for storage by a Pod.                                                  | Claim PVs for use in applications.                         |
+| **Namespace**                   | Virtual cluster within a Kubernetes cluster.                                   | Organize resources by team/project.                        |
+| **Node**                        | Worker machine in Kubernetes (VM or physical).                                 | Runs Pods and workloads.                                   |
+
+
+Pods run containers.
+Deployments/ReplicaSets/StatefulSets manage Pods.
+Services/Ingress expose them.
+ConfigMaps/Secrets provide configuration.
+Volumes/PVCs handle storage.
+Jobs/CronJobs handle one-time or scheduled tasks.
+
+
