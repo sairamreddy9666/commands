@@ -1,3 +1,6 @@
+launch instance t2.micro and add IAM permission.
+install aws cli, kops, kubectl and helm.
+
 STEPS TO SETUP PROMETHEUS & GRAFANA IN KOPS:
  INSTALL HEML:
  curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
@@ -39,3 +42,18 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 
 Integrate prometheus in to grafana as data source.
 we can create or import dashboard to visualize kubernetes objects. No. 6417, 1860, 315.
+
+-------------------------------------------------------
+if persistentVolume not works because cluster wasn't supporting this t2.micro so use this
+
+helm upgrade --install prometheus prometheus-community/prometheus \
+  --namespace prometheus \
+  --set server.persistentVolume.enabled=false \
+  --set alertmanager.persistentVolume.enabled=false
+
+helm upgrade --install grafana grafana/grafana \
+  --namespace grafana \
+  --set persistence.enabled=false \
+  --set adminPassword='password' \
+  --set service.type=LoadBalancer
+-------------------------------------------------------------
