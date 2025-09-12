@@ -36,3 +36,6 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
  kubectl get service -n grafana
 
  Copy the EXTERNAL-IP and paste in browser
+
+Integrate prometheus in to grafana as data source.
+we can create or import dashboard to visualize kubernetes objects. No. 6417, 1860, 315.
