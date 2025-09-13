@@ -1,0 +1,49 @@
+1. Launch instance with t2.micro
+2. open datadoghq.com and create a free account (Try it free for 14 days and monitor as many servers as you like). signup with required details.
+3. Install the Datadog Agent on Linux using this command
+
+DD_API_KEY=632bccfc3bae873f6c2ac4624dd6b9ac \
+DD_SITE="us5.datadoghq.com" \
+bash -c "$(curl -L https://install.datadoghq.com/scripts/install_script_agent7.sh)"
+
+systemctl start datadog-agent
+systemctl enable datadog-agent
+
+It can create Host Map for You (have 1 host reporting data to Datadog.
+See your hosts in more detail in your Expanded host map.) after waiting for 5 minutes we can access dashboard of a working server or else we can create on our own.
+
+**DataDog takes time for the configuration setup the only disadvantage after that everything is good. it is used to monitor CPU, RAM, DISK, Processes, Containers, etc.
+
+4. we need to setup processes for that go to Host Map -> Processes --> Get started --> Linux --> Agent main configuration file --> vim /etc/datadog-agent/datadog.yaml -->
+:set number
+/process collection configuration
+:1606
+--paste this command
+process_config:
+  process_collection:
+    enabled: true
+
+After configuration is complete, restart the Agent.
+systemctl restart datadog-agent
+chkconfig datadog-agent   -->checking enable or not
+aceess processes on datadog
+
+5. yum install httpd -y && systemctl start httpd && systemctl enable httpd  --> install webserver
+vim /etc/httpd/conf/httpd.conf
+:set number
+/load  -->search for load module
+:60
+LoadModule status_module modules/mod_status.so
+<Location /server-status>
+SetHandler server-status
+order deny,allow
+Deny from all
+Allow from all
+Allow from <your-Private-IP>
+</Location>
+ExtendedStatus On
+
+httpd -t  --->to check the changed httpd configurations right or wrong (syntax ok).
+systemctl restart httpd  --> restart the server and wait for few minutes and the logs will be stored in datadog processes.
+
+6. we can also monitor containers on datadog
